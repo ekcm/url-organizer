@@ -6,6 +6,7 @@ import (
 	"github.com/ekcm/url-organizer/UrlLink/models"
 	"github.com/ekcm/url-organizer/UrlLink/services"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type UrlLinkController struct {
@@ -21,8 +22,7 @@ func New(urlService services.UrlLinkService) UrlLinkController {
 func (uc *UrlLinkController) RegisterUserRoutes(router *gin.RouterGroup){
 	userroute := router.Group("/url")
 	userroute.POST("/create", uc.CreateUrlLink)
-	// userroute.GET("/:urlId", uc.GetUrlLink)
-	// userroute.GET("/", uc.GetUrlLinks)
+	userroute.GET("/get/:id", uc.GetUrlLink)
 }
 
 func (uc *UrlLinkController) CreateUrlLink(ctx *gin.Context) {
@@ -44,5 +44,23 @@ func (uc *UrlLinkController) CreateUrlLink(ctx *gin.Context) {
 	}
 	// if the user creation was successful, respond with a success status and a message
 	ctx.JSON(http.StatusOK, gin.H{"message": "UrlLink created successfully"})
+}
+
+func (uc *UrlLinkController) GetUrlLink(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+
+	// convert the string to objectID
+	objId, err := primitive.ObjectIDFromHex(idParam)
+	if err != nil{
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	urlLink, err := uc.UrlService.GetUrlLink(objId)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, urlLink)
 }
 
