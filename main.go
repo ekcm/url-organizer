@@ -6,8 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/ekcm/url-organizer/UrlLink/controllers"
-	"github.com/ekcm/url-organizer/UrlLink/services"
+	"github.com/ekcm/url-organizer/UrlLink"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -34,12 +33,10 @@ func init() {
 	fmt.Println("Connected to MongoDB!")
 
 	urlLinkCollection = mongoclient.Database("urlLinkdb").Collection("urlLinks")
-	urlLinkService = services.NewUrlLinkService(urlLinkCollection, ctx)
-	urlLinkController = controllers.New(urlLinkService)
+	urlLinkService = UrlLink.NewUrlLinkService(urlLinkCollection, ctx)
+	urlLinkController = UrlLink.New(urlLinkService)
 
-	urlFolderCollection = mongoclient.Database("urlFolderdb").Collection("urlFolders")
-	// urlFolderService = services.NewUrlFolderService(urlFolderCollection, ctx)
-	// urlFolderController = controllers.New(urlFolderService)
+	// urlFolderCollection = mongoclient.Database("urlFolderdb").Collection("urlFolders")
 
 	// initialize gin server
 	server = gin.Default()
@@ -50,12 +47,12 @@ var (
 	ctx               context.Context
 	mongoclient       *mongo.Client
 	err               error
-	urlLinkService    services.UrlLinkService
-	urlLinkController controllers.UrlLinkController
+	urlLinkService		UrlLink.UrlLinkService
+	urlLinkController UrlLink.UrlLinkController
+
+
 	urlLinkCollection *mongo.Collection
-	// urlFolderService services.UrlFolderService
-	// urlFolderController controllers.UrlFolderController
-	urlFolderCollection *mongo.Collection
+	// urlFolderCollection *mongo.Collection
 )
 
 func main() {

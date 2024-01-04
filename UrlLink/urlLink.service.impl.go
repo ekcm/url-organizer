@@ -1,9 +1,8 @@
-package services
+package UrlLink
 
 import (
 	"context"
 
-	"github.com/ekcm/url-organizer/UrlLink/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -21,20 +20,20 @@ func NewUrlLinkService(urlLinkCollection *mongo.Collection, ctx context.Context)
 	}
 }
 
-func (u *UrlLinkServiceImpl) CreateUrlLink(url *models.UrlLink) error {
+func (u *UrlLinkServiceImpl) CreateUrlLink(url *UrlLink) error {
 	_, err := u.urlLinkCollection.InsertOne(u.ctx, url)
 	return err
 }
 
-func (u *UrlLinkServiceImpl) GetUrlLink(id primitive.ObjectID) (*models.UrlLink, error) {
-	var urlLink *models.UrlLink
+func (u *UrlLinkServiceImpl) GetUrlLink(id primitive.ObjectID) (*UrlLink, error) {
+	var urlLink *UrlLink
 	query := bson.D{bson.E{Key: "_id", Value: id}}
 	err := u.urlLinkCollection.FindOne(u.ctx, query).Decode(&urlLink)
 	return urlLink, err
 }
 
-func (u *UrlLinkServiceImpl) GetAll() ([]*models.UrlLink, error) {
-	var urlLinks []*models.UrlLink
+func (u *UrlLinkServiceImpl) GetAll() ([]*UrlLink, error) {
+	var urlLinks []*UrlLink
 	cursor, err := u.urlLinkCollection.Find(u.ctx, bson.M{})
 	if err != nil {
 		return nil, err

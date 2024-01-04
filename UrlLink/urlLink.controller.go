@@ -1,19 +1,17 @@
-package controllers
+package UrlLink
 
 import (
 	"net/http"
 
-	"github.com/ekcm/url-organizer/UrlLink/models"
-	"github.com/ekcm/url-organizer/UrlLink/services"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type UrlLinkController struct {
-	UrlService services.UrlLinkService
+	UrlService UrlLinkService
 }
 
-func New(urlService services.UrlLinkService) UrlLinkController {
+func New(urlService UrlLinkService) UrlLinkController {
 	return UrlLinkController{
 		UrlService: urlService,
 	}
@@ -27,7 +25,7 @@ func (uc *UrlLinkController) RegisterUserRoutes(router *gin.RouterGroup) {
 }
 
 func (uc *UrlLinkController) CreateUrlLink(ctx *gin.Context) {
-	var urlLink models.UrlLink
+	var urlLink UrlLink
 	// attempt to bind JSON request body to 'urlLink' variable
 	if err := ctx.ShouldBindJSON(&urlLink); err != nil {
 		// if there is an error in binding, respond with a bad request status
