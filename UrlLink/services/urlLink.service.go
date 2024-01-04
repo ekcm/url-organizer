@@ -8,7 +8,7 @@ import (
 type UrlLinkService interface {
 	CreateUrlLink(*models.UrlLink) error
 	GetUrlLink(primitive.ObjectID) (*models.UrlLink, error)
-	// GetAll() ([]*models.UrlLink, error)
+	GetAll() ([]*models.UrlLink, error)
 	// UpdateUrlLink(urlLink *models.UrlLink) error
 	// DeleteUrlLink(urlId string) error
 }

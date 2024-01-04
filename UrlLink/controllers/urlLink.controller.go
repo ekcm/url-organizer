@@ -19,10 +19,11 @@ func New(urlService services.UrlLinkService) UrlLinkController {
 	}
 }
 
-func (uc *UrlLinkController) RegisterUserRoutes(router *gin.RouterGroup){
+func (uc *UrlLinkController) RegisterUserRoutes(router *gin.RouterGroup) {
 	userroute := router.Group("/url")
 	userroute.POST("/create", uc.CreateUrlLink)
 	userroute.GET("/get/:id", uc.GetUrlLink)
+	userroute.GET("/getall", uc.GetAll)
 }
 
 func (uc *UrlLinkController) CreateUrlLink(ctx *gin.Context) {
@@ -40,7 +41,7 @@ func (uc *UrlLinkController) CreateUrlLink(ctx *gin.Context) {
 	if err != nil {
 		// if there is an error, respond with bad gateway status and error message
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
-		return 
+		return
 	}
 	// if the user creation was successful, respond with a success status and a message
 	ctx.JSON(http.StatusOK, gin.H{"message": "UrlLink created successfully"})
@@ -51,7 +52,7 @@ func (uc *UrlLinkController) GetUrlLink(ctx *gin.Context) {
 
 	// convert the string to objectID
 	objId, err := primitive.ObjectIDFromHex(idParam)
-	if err != nil{
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
@@ -64,3 +65,11 @@ func (uc *UrlLinkController) GetUrlLink(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, urlLink)
 }
 
+func (uc *UrlLinkController) GetAll(ctx *gin.Context) {
+	urlLinks, err := uc.UrlService.GetAll()
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, urlLinks)
+}

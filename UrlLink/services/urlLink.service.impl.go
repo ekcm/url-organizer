@@ -33,4 +33,16 @@ func (u *UrlLinkServiceImpl) GetUrlLink(id primitive.ObjectID) (*models.UrlLink,
 	return urlLink, err
 }
 
+func (u *UrlLinkServiceImpl) GetAll() ([]*models.UrlLink, error) {
+	var urlLinks []*models.UrlLink
+	cursor, err := u.urlLinkCollection.Find(u.ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	if err = cursor.All(u.ctx, &urlLinks); err != nil {
+		return nil, err
+	}
+	return urlLinks, nil
+}
+
 
