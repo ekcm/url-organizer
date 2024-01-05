@@ -6,7 +6,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/ekcm/url-organizer/UrlLink"
+	"github.com/ekcm/url-organizer/pkg/UrlLink"
+	"github.com/ekcm/url-organizer/pkg/UrlFolder"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -36,7 +37,9 @@ func init() {
 	urlLinkService = UrlLink.NewUrlLinkService(urlLinkCollection, ctx)
 	urlLinkController = UrlLink.New(urlLinkService)
 
-	// urlFolderCollection = mongoclient.Database("urlFolderdb").Collection("urlFolders")
+	urlFolderCollection = mongoclient.Database("urlFolderdb").Collection("urlFolders")
+	urlFolderService = UrlFolder.NewUrlFolderService(urlFolderCollection, ctx)
+	urlFolderController = UrlFolder.New(urlFolderService)
 
 	// initialize gin server
 	server = gin.Default()
@@ -47,12 +50,12 @@ var (
 	ctx               context.Context
 	mongoclient       *mongo.Client
 	err               error
-	urlLinkService		UrlLink.UrlLinkService
+	urlLinkService    UrlLink.UrlLinkService
 	urlLinkController UrlLink.UrlLinkController
-
-
 	urlLinkCollection *mongo.Collection
-	// urlFolderCollection *mongo.Collection
+	urlFolderService		UrlFolder.UrlFolderService
+	urlFolderController UrlFolder.UrlFolderController
+	urlFolderCollection *mongo.Collection
 )
 
 func main() {
@@ -60,6 +63,7 @@ func main() {
 
 	basepath := server.Group("v1")
 	urlLinkController.RegisterUserRoutes(basepath)
+	urlFolderController.RegisterUserRoutes(basepath)
 
 	log.Fatal(server.Run(":9090"))
 }

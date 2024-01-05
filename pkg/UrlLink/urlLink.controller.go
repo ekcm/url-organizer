@@ -18,10 +18,10 @@ func New(urlService UrlLinkService) UrlLinkController {
 }
 
 func (uc *UrlLinkController) RegisterUserRoutes(router *gin.RouterGroup) {
-	userroute := router.Group("/url")
-	userroute.POST("/create", uc.CreateUrlLink)
-	userroute.GET("/get/:id", uc.GetUrlLink)
-	userroute.GET("/getall", uc.GetAll)
+	urlroute := router.Group("/url")
+	urlroute.POST("/create", uc.CreateUrlLink)
+	urlroute.GET("/get/:id", uc.GetUrlLink)
+	urlroute.GET("/getall", uc.GetAll)
 }
 
 func (uc *UrlLinkController) CreateUrlLink(ctx *gin.Context) {
