@@ -2,6 +2,7 @@ package UrlLink
 
 import (
 	"context"
+	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -44,4 +45,19 @@ func (u *UrlLinkServiceImpl) GetAll() ([]*UrlLink, error) {
 	return urlLinks, nil
 }
 
+func (u *UrlLinkServiceImpl) UpdateUrlLink(urlLink *UrlLink) error {
+	filter := bson.D{bson.E{Key: "_id", Value: urlLink.ID}}
+	update := bson.D{bson.E{Key: "$set", Value: bson.D{
+		bson.E{Key: "url", Value: urlLink.Url},
+		bson.E{Key: "urlName", Value: urlLink.UrlName},
+		bson.E{Key: "urlType", Value: urlLink.UrlType},
+	}}}
+	// _, err := u.urlLinkCollection.UpdateOne(u.ctx, filter, update)
+	// return err
 
+	result, _ := u.urlLinkCollection.UpdateOne(u.ctx, filter, update)
+	if result.ModifiedCount != 1 {
+		return errors.New("error updating urlLink")
+	}
+	return nil
+}

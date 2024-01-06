@@ -22,6 +22,7 @@ func (uc *UrlLinkController) RegisterUserRoutes(router *gin.RouterGroup) {
 	urlroute.POST("/create", uc.CreateUrlLink)
 	urlroute.GET("/get/:id", uc.GetUrlLink)
 	urlroute.GET("/getall", uc.GetAll)
+	urlroute.PUT("/update/:id", uc.UpdateUrlLink)
 }
 
 func (uc *UrlLinkController) CreateUrlLink(ctx *gin.Context) {
@@ -70,4 +71,36 @@ func (uc *UrlLinkController) GetAll(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, urlLinks)
+}
+
+func (uc *UrlLinkController) UpdateUrlLink(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+
+	// convert the string to objectID
+	objId, err := primitive.ObjectIDFromHex(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	// retrieve the urlLink from the database
+	urlLink, err := uc.UrlService.GetUrlLink(objId)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	// attempt to bind JSON request body to 'urlLink' variable
+	if err := ctx.ShouldBindJSON(&urlLink); err != nil {
+		// if there is an error in binding, respond with a bad request status
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	err = uc.UrlService.UpdateUrlLink(urlLink)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, urlLink)
 }
