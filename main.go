@@ -38,7 +38,8 @@ func init() {
 	urlLinkController = UrlLink.New(urlLinkService)
 
 	urlFolderCollection = mongoclient.Database("urlFolderdb").Collection("urlFolders")
-	urlFolderService = UrlFolder.NewUrlFolderService(urlFolderCollection, ctx)
+	// urlFolderService = UrlFolder.NewUrlFolderService(urlFolderCollection, ctx)
+	urlFolderService = UrlFolder.NewUrlFolderService(urlFolderCollection, urlLinkCollection, ctx)
 	urlFolderController = UrlFolder.New(urlFolderService)
 
 	// initialize gin server

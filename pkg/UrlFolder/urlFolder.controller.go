@@ -3,6 +3,7 @@ package UrlFolder
 import (
 	"net/http"
 
+	"github.com/ekcm/url-organizer/pkg/UrlLink"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -22,7 +23,7 @@ func (ufc *UrlFolderController) RegisterUserRoutes(router *gin.RouterGroup) {
 	urlfolderroute.POST("/create", ufc.CreateUrlFolder)
 	urlfolderroute.GET("/get/:id", ufc.GetUrlFolder)
 	urlfolderroute.PUT("/add/:id/:urlid", ufc.AddUrlLink)
-	// urlfolderroute.PUT("/createUrlLink/:id", ufc.CreateUrlLink)
+	urlfolderroute.PUT("/createAddUrlLink/:id", ufc.CreateAddUrlLink)
 	// urlroute.GET("/getall", ufc.GetAllFolder)
 }
 
@@ -89,6 +90,36 @@ func (ufc *UrlFolderController) AddUrlLink(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": urlFolder})
 	// ctx.JSON(http.StatusOK, gin.H{"message": "UrlLink added successfully"})
+}
+
+func (ufc *UrlFolderController) CreateAddUrlLink(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+
+	objId, err := primitive.ObjectIDFromHex(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	// create urlLink object and bind JSON data from the request
+	var urlLink UrlLink.UrlLink
+	if err := ctx.ShouldBindJSON(&urlLink); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	err = ufc.UrlFolderService.CreateAddUrlLink(objId, urlLink) 
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	urlFolder, err := ufc.UrlFolderService.GetUrlFolder(objId)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": urlFolder})
 }
 
 
