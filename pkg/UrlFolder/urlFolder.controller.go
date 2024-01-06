@@ -21,6 +21,8 @@ func (ufc *UrlFolderController) RegisterUserRoutes(router *gin.RouterGroup) {
 	urlfolderroute := router.Group("/urlfolder")
 	urlfolderroute.POST("/create", ufc.CreateUrlFolder)
 	urlfolderroute.GET("/get/:id", ufc.GetUrlFolder)
+	urlfolderroute.PUT("/add/:id/:urlid", ufc.AddUrlLink)
+	// urlfolderroute.PUT("/createUrlLink/:id", ufc.CreateUrlLink)
 	// urlroute.GET("/getall", ufc.GetAllFolder)
 }
 
@@ -57,6 +59,36 @@ func (ufc *UrlFolderController) GetUrlFolder(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": urlFolder})
 }
 
-// func (ufc *UrlFolderController) GetAllFolder(ctx *gin.Context) {
-// 	ctx.JSON(http.StatusOK, gin.H{"message": "All UrlFolders retrieved successfully"})
-// }
+func (ufc *UrlFolderController) AddUrlLink(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	urlIdParam := ctx.Param("urlid")
+
+	objId, err := primitive.ObjectIDFromHex(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	urlObjId, err := primitive.ObjectIDFromHex(urlIdParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	err = ufc.UrlFolderService.AddUrlLink(objId, urlObjId)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	// uncomment this and comment the below line if you want to receive success message as response instead of updated urlFolder
+	urlFolder, err := ufc.UrlFolderService.GetUrlFolder(objId)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": urlFolder})
+	// ctx.JSON(http.StatusOK, gin.H{"message": "UrlLink added successfully"})
+}
+
+

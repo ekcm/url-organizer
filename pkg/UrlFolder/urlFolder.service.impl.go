@@ -32,3 +32,17 @@ func (u *UrlFolderServiceImpl) GetUrlFolder(id primitive.ObjectID) (*UrlFolder, 
 	return urlFolder, err
 }
 
+// func (u *UrlFolderServiceImpl) AddUrlLink(id primitive.ObjectID, urlId primitive.ObjectID) error {
+// 	query := bson.D{bson.E{Key: "_id", Value: id}}
+// 	update := bson.D{bson.E{Key: "$push", Value: bson.D{bson.E{Key: "urlLinks", Value: urlId}}}}
+// 	_, err := u.urlFolderCollection.UpdateOne(u.ctx, query, update)
+// 	return err
+// }
+
+func (u *UrlFolderServiceImpl) AddUrlLink(id primitive.ObjectID, urlId primitive.ObjectID) error {
+	query := bson.D{bson.E{Key: "_id", Value: id}}
+	update := bson.D{bson.E{Key: "$push", Value: bson.D{bson.E{Key: "urlLinks", Value: urlId}}}}
+	_, err := u.urlFolderCollection.UpdateOne(u.ctx, query, update)
+	return err
+}
+
