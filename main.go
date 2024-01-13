@@ -6,8 +6,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/ekcm/url-organizer/pkg/UrlLink"
 	"github.com/ekcm/url-organizer/pkg/UrlFolder"
+	"github.com/ekcm/url-organizer/pkg/UrlLink"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -44,6 +45,11 @@ func init() {
 
 	// initialize gin server
 	server = gin.Default()
+
+	// Apply CORS middleware
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"} // Add your frontend origin
+	server.Use(cors.New(config))
 }
 
 var (

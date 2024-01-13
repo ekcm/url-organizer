@@ -1,11 +1,14 @@
 'use client'
 import React, { useState } from 'react';
+import Navbar from './Navbar';
+import Body from './Body';
 
 
 export default function App() {
   return (
     <div>
-      <h1>Hello World</h1>
+      <Navbar />
+      <Body />
     </div>
   );
 }

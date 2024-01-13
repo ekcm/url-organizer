@@ -25,3 +25,37 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+#navbar-title{
+  color: theme("colors.blue-2")
+}
+
+#navbar-title:hover{
+  color: theme("colors.blue-1")
+}
+
+.container-body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.card-container{
+  background-color: theme("colors.grey-1");
+  position: relative;
+  height: 400px;
+  width: 320px;
+  border-radius: 8px;
+}
+
+#populate-button{
+  position: relative;
+  background-color: theme("colors.blue-1");
+  color: theme("colors.white");
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
