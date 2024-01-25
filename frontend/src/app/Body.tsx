@@ -21,7 +21,32 @@ const onButtonClick = async() => {
 
     const data = await response.json();
     console.log("response from backend")
-    console.log(data);  // data is a JSON object
+    console.log(data.message.urlLinks);  // data is a JSON object
+    var urlLinks = data.message.urlLinks;
+
+    for (var urlLink of urlLinks){
+      console.log(urlLink)
+      try{
+        var urlLinksUrl = "http://localhost:9090/v1/url/get/" + urlLink;
+        const response = await fetch(urlLinksUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      
+        if (!response.ok){
+          throw new Error('Network response was not ok');
+        }
+        
+        const data = await response.json();
+        console.log("response from urlLink")
+        console.log(data);
+      
+      }catch (error) {
+        console.log(error);
+      }
+    }
 
   } catch (error) {
     console.log(error);
@@ -31,12 +56,15 @@ const onButtonClick = async() => {
 const Body = () => {
 
   return (
-    <div className="container-body">
-      <button id="populate-button" onClick={onButtonClick}>
-        <h6>Click here to populate URL</h6>
-      </button>
-      {/* <Card />
-      <Card /> */}
+    <div className="body">
+      <div>
+        <button id="populate-button" onClick={onButtonClick}>
+          <h6>Click here to populate URL</h6>
+        </button>
+      </div>
+      <div className="container-body">
+        {/* <Card /> */}
+      </div>
     </div>
   )
 
