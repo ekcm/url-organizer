@@ -1,6 +1,7 @@
 'use client'
 import React, {useState} from "react";
 import Card from "./Card";
+import ReactDOM from 'react-dom';
 
 const onButtonClick = async() => {
   console.log("Button clicked");
@@ -40,8 +41,9 @@ const onButtonClick = async() => {
         }
         
         const data = await response.json();
-        console.log("response from urlLink")
         console.log(data);
+
+        createCard(data.urlName, data.url);
       
       }catch (error) {
         console.log(error);
@@ -53,17 +55,41 @@ const onButtonClick = async() => {
   }
 };
 
+const createCard: (urlName:string, url:string) => void = (urlName, url) => {
+
+  const cardDiv = document.createElement('div');
+  ReactDOM.render(<Card />, cardDiv);
+  const container = document.getElementsByClassName('container-body')[0] as HTMLElement | null;
+
+  if (container) {
+    // Append the Card component to the container
+    container.appendChild(cardDiv);
+    const h2Element = cardDiv.querySelector('h2');
+    if (h2Element) {
+      h2Element.textContent = urlName;
+    }
+
+    const h6Element = cardDiv.querySelector('h6');
+    if (h6Element) {
+      h6Element.textContent = url;
+    }
+
+  }
+}
+
 const Body = () => {
 
   return (
     <div className="body">
       <div>
         <button id="populate-button" onClick={onButtonClick}>
-          <h6>Click here to populate URL</h6>
+          <h6>Retrieve saved urls</h6>
         </button>
+        {/* <button id="add-button" onClick={createCard}>
+          <h6>Click here to add URL</h6></button> */}
       </div>
       <div className="container-body">
-        {/* <Card /> */}
+        {/* <Card/> */}
       </div>
     </div>
   )

@@ -40,22 +40,52 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 30px;
+  margin-top: 10px;
 }
 
 .card-container{
-  background-color: theme("colors.grey-1");
+  background-color: theme("colors.blue-2");
   position: relative;
-  height: 400px;
-  width: 320px;
+  width: 400px;
+  height: 100px;
   border-radius: 8px;
+  padding: 5px;
 }
 
 #populate-button{
-  position: relative;
+  display: block;
   background-color: theme("colors.blue-1");
   color: theme("colors.white");
   border-radius: 8px;
   padding: 5px 10px;
   cursor: pointer;
   font-size: 12px;
+  margin: 0 auto;
+}
+
+#populate-button:hover{
+  background-color: theme("colors.blue-3");
+}
+
+#url-link-container{
+  height: 25%;
+  background-color: white;
+  color: grey;
+  border-radius: 5px;
+  padding: 2px;
+  font-size: 12px;
+}
+
+#url-link-button{
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 12px;
+  margin-top: 0.25rem;
+  right: 5px;
+  position: absolute;
+}
+
+#url-link-button:hover{
+  background-color: theme("colors.blue-1");
 }
