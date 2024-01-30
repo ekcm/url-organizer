@@ -1,6 +1,7 @@
 'use client'
 import React, {useState} from "react";
 import Card from "./Card";
+import AddCard from "./Add-Card";
 import ReactDOM from 'react-dom';
 
 const onButtonClick = async() => {
@@ -26,7 +27,7 @@ const onButtonClick = async() => {
     var urlLinks = data.message.urlLinks;
 
     for (var urlLink of urlLinks){
-      console.log(urlLink)
+      // console.log(urlLink)
       try{
         var urlLinksUrl = "http://localhost:9090/v1/url/get/" + urlLink;
         const response = await fetch(urlLinksUrl, {
@@ -41,7 +42,7 @@ const onButtonClick = async() => {
         }
         
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         createCard(data.urlName, data.url);
       
@@ -54,6 +55,17 @@ const onButtonClick = async() => {
     console.log(error);
   }
 };
+
+const addNewCard = () => {
+  const addCardDiv = document.createElement('div');
+  ReactDOM.render(<AddCard />, addCardDiv);
+  const container = document.getElementById('add-url-container');
+
+  if (container) {
+    // Append the Card component to the container
+    container.appendChild(addCardDiv);
+  }
+}
 
 const createCard: (urlName:string, url:string) => void = (urlName, url) => {
 
@@ -85,9 +97,11 @@ const Body = () => {
         <button id="populate-button" onClick={onButtonClick}>
           <h6>Retrieve saved urls</h6>
         </button>
-        {/* <button id="add-button" onClick={createCard}>
-          <h6>Click here to add URL</h6></button> */}
+        <button id="add-new-url-button" onClick={addNewCard}>
+          <h6>Add new url</h6>
+        </button>
       </div>
+      <div id="add-url-container"></div>
       <div className="container-body">
         {/* <Card/> */}
       </div>

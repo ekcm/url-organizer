@@ -52,8 +52,8 @@ body {
   padding: 5px;
 }
 
-#populate-button{
-  display: block;
+#populate-button, #add-new-url-button{
+  display: inline-block;
   background-color: theme("colors.blue-1");
   color: theme("colors.white");
   border-radius: 8px;
@@ -63,11 +63,23 @@ body {
   margin: 0 auto;
 }
 
+#populate-button{
+  background-color: theme("colors.blue-1");
+}
+
 #populate-button:hover{
   background-color: theme("colors.blue-3");
 }
 
-#url-link-container{
+#add-new-url-button{
+  background-color: theme("colors.yellow-1");
+}
+
+#add-new-url-button:hover{
+  background-color: theme("colors.yellow-2");
+}
+
+.url-container{
   height: 25%;
   background-color: white;
   color: grey;
@@ -87,5 +99,41 @@ body {
 }
 
 #url-link-button:hover{
-  background-color: theme("colors.blue-1");
+  background-color: theme("colors.yellow-2");
+  border: 0px;
+}
+
+.add-card-container{
+  background-color: theme("colors.yellow-1");
+  position: relative;
+  width: 400px;
+  height: 100px;
+  border-radius: 8px;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+#add-url-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.url-input{
+  height: 25%;
+  color: grey;
+  border-radius: 5px;
+  padding: 2px;
+  font-size: 12px;
+}
+
+.url-label{
+  color: white;
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+#url-link-input{
+  width: 250px;
 }
